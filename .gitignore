@@ -1,20 +1,18 @@
-# Environment files (sensitive variables)
+# Environment and sensitive files
 .env
 load_env.sh
 
-# Terraform
+# Terraform state and configuration
 *.tfstate
 *.tfstate.*
 .terraform/
 terraform.tfvars
 .terraform.lock.hcl
-terraform.tfstate
-terraform.tfstate.backup
-
 
 # Python virtual environment
 venv/
 
-# Sistem files
+# System files
 desktop.ini
+
 
