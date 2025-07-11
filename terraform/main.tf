@@ -60,3 +60,24 @@ resource "azurerm_key_vault" "kv" {
   }
 }
 
+resource "azurerm_data_factory" "adf" {
+  name                = "adf-etl-automation"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  tags = {
+    environment = "dev"
+    project     = "azure-etl-automation"
+  }
+}
+
+resource "azurerm_storage_container" "processed_data" {
+  name                  = "processed"
+  storage_account_name  = azurerm_storage_account.storage.name
+  container_access_type = "private"
+}
+

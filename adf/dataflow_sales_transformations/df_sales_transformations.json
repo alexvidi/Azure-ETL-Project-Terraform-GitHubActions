@@ -1,0 +1,89 @@
+{
+    "name": "df_sales_transformations",
+    "properties": {
+        "description": "ADF sales transformations",
+        "type": "MappingDataFlow",
+        "typeProperties": {
+            "sources": [
+                {
+                    "dataset": {
+                        "referenceName": "ds_sales_clean_csv",
+                        "type": "DatasetReference"
+                    },
+                    "name": "SalesSource",
+                    "description": "Load sales data from cleaned CSV stored in Azure Blob Storage (ds_sales_clean_csv)"
+                }
+            ],
+            "sinks": [
+                {
+                    "dataset": {
+                        "referenceName": "SinkProcessedSales",
+                        "type": "DatasetReference"
+                    },
+                    "name": "SinkProcessedSales",
+                    "description": "Save processed sales data to the processed container in Azure Blob Storage"
+                }
+            ],
+            "transformations": [
+                {
+                    "name": "FilterOrderAndShipDate",
+                    "description": "Remove rows where order_date and ship_date are null to ensure only records with a valid order and ship date are processed."
+                },
+                {
+                    "name": "ConvertPostalCode",
+                    "description": "Convert postal_code from float to string and remove decimals."
+                },
+                {
+                    "name": "AggregateByCustomer",
+                    "description": "Aggregate sales metrics by customer: total sales, order count, last order date."
+                },
+                {
+                    "name": "ConvertSalesToNumber",
+                    "description": "Convert sales column from string to number"
+                },
+                {
+                    "name": "FormatTotalSales",
+                    "description": "Add $ symbol to total_sales and convert it to string."
+                }
+            ],
+            "scriptLines": [
+                "source(output(",
+                "          order_id as string,",
+                "          order_date as string,",
+                "          ship_date as string,",
+                "          ship_mode as string,",
+                "          customer_id as string,",
+                "          customer_name as string,",
+                "          segment as string,",
+                "          country as string,",
+                "          city as string,",
+                "          state as string,",
+                "          postal_code as string,",
+                "          region as string,",
+                "          product_id as string,",
+                "          category as string,",
+                "          sub_category as string,",
+                "          product_name as string,",
+                "          sales as string",
+                "     ),",
+                "     allowSchemaDrift: true,",
+                "     validateSchema: false,",
+                "     ignoreNoFilesFound: false) ~> SalesSource",
+                "SalesSource filter(!isNull(order_date) && !isNull(ship_date)",
+                "",
+                ") ~> FilterOrderAndShipDate",
+                "FilterOrderAndShipDate derive(postal_code = toString(toInteger(postal_code))) ~> ConvertPostalCode",
+                "ConvertSalesToNumber aggregate(groupBy(customer_id),",
+                "     total_sales = sum(sales),",
+                "          order_count = count(order_id),",
+                "          last_order_date = max(order_date)) ~> AggregateByCustomer",
+                "ConvertPostalCode derive(sales = toInteger(sales)) ~> ConvertSalesToNumber",
+                "AggregateByCustomer derive(total_sales = toString(total_sales) + ' $') ~> FormatTotalSales",
+                "FormatTotalSales sink(allowSchemaDrift: true,",
+                "     validateSchema: false,",
+                "     skipDuplicateMapInputs: true,",
+                "     skipDuplicateMapOutputs: true) ~> SinkProcessedSales"
+            ]
+        }
+    }
+}

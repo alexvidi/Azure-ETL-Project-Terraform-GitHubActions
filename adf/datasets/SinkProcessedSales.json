@@ -1,0 +1,23 @@
+{
+    "name": "SinkProcessedSales",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "ls_blob_etlstoragedemoalex",
+            "type": "LinkedServiceReference"
+        },
+        "annotations": [],
+        "type": "DelimitedText",
+        "typeProperties": {
+            "location": {
+                "type": "AzureBlobStorageLocation",
+                "fileName": "processed_sales.csv",
+                "container": "processed"
+            },
+            "columnDelimiter": ",",
+            "escapeChar": "\\",
+            "firstRowAsHeader": true,
+            "quoteChar": "\""
+        },
+        "schema": []
+    }
+}

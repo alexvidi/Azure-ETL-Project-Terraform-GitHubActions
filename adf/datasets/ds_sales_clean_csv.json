@@ -1,0 +1,93 @@
+{
+    "name": "ds_sales_clean_csv",
+    "properties": {
+        "description": "sales dataset from raw container",
+        "linkedServiceName": {
+            "referenceName": "ls_blob_etlstoragedemoalex",
+            "type": "LinkedServiceReference"
+        },
+        "annotations": [],
+        "type": "DelimitedText",
+        "typeProperties": {
+            "location": {
+                "type": "AzureBlobStorageLocation",
+                "fileName": "sales_clean.csv",
+                "container": "raw"
+            },
+            "columnDelimiter": ",",
+            "escapeChar": "\\",
+            "firstRowAsHeader": true,
+            "quoteChar": "\""
+        },
+        "schema": [
+            {
+                "name": "order_id",
+                "type": "String"
+            },
+            {
+                "name": "order_date",
+                "type": "String"
+            },
+            {
+                "name": "ship_date",
+                "type": "String"
+            },
+            {
+                "name": "ship_mode",
+                "type": "String"
+            },
+            {
+                "name": "customer_id",
+                "type": "String"
+            },
+            {
+                "name": "customer_name",
+                "type": "String"
+            },
+            {
+                "name": "segment",
+                "type": "String"
+            },
+            {
+                "name": "country",
+                "type": "String"
+            },
+            {
+                "name": "city",
+                "type": "String"
+            },
+            {
+                "name": "state",
+                "type": "String"
+            },
+            {
+                "name": "postal_code",
+                "type": "String"
+            },
+            {
+                "name": "region",
+                "type": "String"
+            },
+            {
+                "name": "product_id",
+                "type": "String"
+            },
+            {
+                "name": "category",
+                "type": "String"
+            },
+            {
+                "name": "sub_category",
+                "type": "String"
+            },
+            {
+                "name": "product_name",
+                "type": "String"
+            },
+            {
+                "name": "sales",
+                "type": "String"
+            }
+        ]
+    }
+}
