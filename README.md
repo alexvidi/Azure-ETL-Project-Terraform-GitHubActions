@@ -2,7 +2,7 @@
 
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python)](https://www.python.org/) [![Terraform](https://img.shields.io/badge/Terraform-%3E%3D1.0.0-623CE4?logo=terraform)](https://www.terraform.io/) [![Azure](https://img.shields.io/badge/Azure-Cloud-blue?logo=microsoft-azure)](https://azure.microsoft.com/)
 
-## Student Project Overview
+## Project Overview
 This repository contains my capstone project for learning and demonstrating modern data engineering and cloud automation skills. The goal was to design and implement a complete ETL (Extract, Transform, Load) pipeline for sales analytics, using real-world tools and best practices. Throughout this project, I focused on building a solution that is not only functional, but also maintainable, scalable, and secure—mirroring the standards of professional data teams. By integrating Python, Azure Data Factory, Terraform, and GitHub Actions, I gained hands-on experience with technologies that are widely used in the industry, and I am excited to showcase my ability to deliver end-to-end data solutions.
 
 ## Executive Summary
