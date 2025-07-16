@@ -46,10 +46,10 @@ flowchart LR
     A[Extract: Kaggle Sales Data]
     B[Transform: Python ETL Script]
     C[Clean: Cleaned CSV]
-    D[Upload: Azure Blob Storage (Raw)]
-    E[Orchestrate: Azure Data Factory]
-    F[Store: Azure Blob Storage (Processed)]
-    G[Secrets: Azure Key Vault]
+    D["Upload: Azure Blob Storage (Raw)"]
+    E["Orchestrate: Azure Data Factory"]
+    F["Store: Azure Blob Storage (Processed)"]
+    G["Secrets: Azure Key Vault"]
 
     A --> B
     B --> C
