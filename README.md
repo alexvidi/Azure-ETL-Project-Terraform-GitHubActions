@@ -43,26 +43,20 @@ This repository contains my capstone project for learning and demonstrating mode
 ## ETL Flow Overview
 ```mermaid
 flowchart LR
-    A[1. Extract\nKaggle Sales Data]
-    B[2. Transform\nPython ETL Script]
-    C[3. Cleaned CSV\n(Processed Data)]
-    D[4. Upload Raw Data\nAzure Blob Storage (Raw)]
-    E[5. Orchestrate & Transform\nAzure Data Factory]
-    F[6. Store Processed Data\nAzure Blob Storage (Processed)]
-    G[Secure Secrets\nAzure Key Vault]
+    A[1. Extract: Kaggle Sales Data]
+    B[2. Transform: Python ETL Script]
+    C[3. Cleaned CSV (Processed Data)]
+    D[4. Upload Raw Data: Azure Blob Storage (Raw)]
+    E[5. Orchestrate & Transform: Azure Data Factory]
+    F[6. Store Processed Data: Azure Blob Storage (Processed)]
+    G[Secure Secrets: Azure Key Vault]
 
     A --> B
     B --> C
     C --> D
     D --> E
-    G -. "retrieves secrets" .-> E
+    G -.-> E
     E --> F
-
-    classDef data           fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px;
-    classDef process        fill:#fff9c4,stroke:#fbc02d,stroke-width:2px;
-    classDef storage        fill:#e3f2fd,stroke:#1565c0,stroke-width:2px;
-    classDef orchestration  fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px;
-    classDef security       fill:#ffebee,stroke:#c62828,stroke-width:2px,stroke-dasharray: 5 5;
 ```
 
 ## Solution Architecture & Process
