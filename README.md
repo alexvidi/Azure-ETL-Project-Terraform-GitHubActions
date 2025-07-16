@@ -43,20 +43,29 @@ This repository contains my capstone project for learning and demonstrating mode
 ## ETL Flow Overview
 ```mermaid
 flowchart LR
-    A[Kaggle Sales Data]
-    B[Python ETL Script]
-    C[Cleaned CSV]
-    D[Azure Blob Storage (Raw)]
-    E[Azure Data Factory]
-    F[Azure Blob Storage (Processed)]
-    G[Azure Key Vault]
+    %% Nodes
+    A[Kaggle Sales Data]:::data
+    B[Python ETL Script]:::process
+    C[Cleaned CSV]:::data
+    D[(Azure Blob Storage – Raw)]:::storage
+    E[[Azure Data Factory]]:::orchestration
+    F[(Azure Blob Storage – Processed)]:::storage
+    G[[Azure Key Vault]]:::security
 
+    %% Edges
     A --> B
     B --> C
     C --> D
     D --> E
-    G -.-> E
+    G -. "retrieves secrets" .-> E
     E --> F
+
+    %% Styles
+    classDef data           fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px;
+    classDef process        fill:#fff9c4,stroke:#fbc02d,stroke-width:2px;
+    classDef storage        fill:#e3f2fd,stroke:#1565c0,stroke-width:2px;
+    classDef orchestration  fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px;
+    classDef security       fill:#ffebee,stroke:#c62828,stroke-width:2px,stroke-dasharray: 5 5;
 ```
 
 ## Solution Architecture & Process
