@@ -43,14 +43,23 @@ This repository contains my capstone project for learning and demonstrating mode
 ## ETL Flow Overview
 ```mermaid
 flowchart LR
-    A[Extract: Kaggle Sales Data]
-    B[Transform: Python ETL Script]
-    C[Clean: Cleaned CSV]
-    D["Upload: Azure Blob Storage (Raw)"]
-    E["Orchestrate: Azure Data Factory"]
-    F["Store: Azure Blob Storage (Processed)"]
-    G["Secrets: Azure Key Vault"]
+    %% Define styles for different node types
+    classDef extract fill:#a9d18e,stroke:#333,stroke-width:2px;
+    classDef transform fill:#f4b183,stroke:#333,stroke-width:2px;
+    classDef storage fill:#8faadc,stroke:#333,stroke-width:2px;
+    classDef orchestrate fill:#ffd966,stroke:#333,stroke-width:2px;
+    classDef secrets fill:#c00000,stroke:#333,stroke-width:2px,color:#fff;
 
+    %% Assign classes to nodes
+    A[Extract: Kaggle Sales Data]:::extract
+    B[Transform: Python ETL Script]:::transform
+    C[Clean: Cleaned CSV]:::transform
+    D["Upload: Azure Blob Storage (Raw)"]:::storage
+    E["Orchestrate: Azure Data Factory"]:::orchestrate
+    F["Store: Azure Blob Storage (Processed)"]:::storage
+    G["Secrets: Azure Key Vault"]:::secrets
+
+    %% Define the flow
     A --> B
     B --> C
     C --> D
