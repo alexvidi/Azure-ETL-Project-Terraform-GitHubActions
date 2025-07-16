@@ -42,12 +42,12 @@ This repository contains my capstone project for learning and demonstrating mode
 
 ## ETL Flow Overview
 ```mermaid
-flowchart LR
-    Kaggle[Kaggle Sales Data] -->|Extract| Script[Python ETL Script]
-    Script -->|Transform| CSV[Cleaned CSV]
-    CSV -->|Upload| Raw[(Azure Blob Storage – Raw)]
-    Raw -->|Orchestrate| ADF[[Azure Data Factory]]
-    ADF -->|Process| Processed[(Azure Blob Storage – Processed)]
+flowchart TB
+    Kaggle[Kaggle Sales Data] -->|Extract| Script[Python ETL Script]
+    Script -->|Transform| CSV[Cleaned CSV]
+    CSV -->|Upload| Raw[(Azure Blob Storage – Raw)]
+    Raw -->|Orchestrate| ADF[[Azure Data Factory]]
+    ADF -->|Process| Processed[(Azure Blob Storage – Processed)]
 ```
 
 ## Solution Architecture & Process
