@@ -1,4 +1,4 @@
-# Azure ETL Automation Project
+# Modern ETL Automation on Azure with Terraform and GitHub Actions
 
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python)](https://www.python.org/) [![Terraform](https://img.shields.io/badge/Terraform-%3E%3D1.0.0-623CE4?logo=terraform)](https://www.terraform.io/) [![Azure](https://img.shields.io/badge/Azure-Cloud-blue?logo=microsoft-azure)](https://azure.microsoft.com/)
 
