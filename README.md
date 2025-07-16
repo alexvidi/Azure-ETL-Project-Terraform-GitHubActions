@@ -43,13 +43,13 @@ This repository contains my capstone project for learning and demonstrating mode
 ## ETL Flow Overview
 ```mermaid
 flowchart LR
-    A[Kaggle Sales Data\n(External Source)]
-    B[Python ETL Script\n(Extract & Transform)]
-    C[Cleaned CSV\n(Local Processed Data)]
-    D[Azure Blob Storage\n(Raw Container)]
-    E[Azure Data Factory\n(Pipeline & Data Flow)]
-    F[Azure Blob Storage\n(Processed Container)]
-    G[Azure Key Vault\n(Secure Secrets)]
+    A[Kaggle Sales Data (External Source)]
+    B[Python ETL Script (Extract & Transform)]
+    C[Cleaned CSV (Local Processed Data)]
+    D[Azure Blob Storage (Raw Container)]
+    E[Azure Data Factory (Pipeline & Data Flow)]
+    F[Azure Blob Storage (Processed Container)]
+    G[Azure Key Vault (Secure Secrets)]
 
     A -->|Download| B
     B -->|Output| C
