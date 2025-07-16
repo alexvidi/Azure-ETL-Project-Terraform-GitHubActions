@@ -43,29 +43,11 @@ This repository contains my capstone project for learning and demonstrating mode
 ## ETL Flow Overview
 ```mermaid
 flowchart LR
-    %% Subgraphs for each phase
-    subgraph Extraction
-        direction TB
-        A[Kaggle Sales Data] -->|1. Download via API| B[Python ETL Script]
-    end
-
-    subgraph Transformation
-        direction TB
-        B -->|2. Clean & Normalize| C[Cleaned CSV]
-    end
-
-    subgraph Loading
-        direction TB
-        C -->|3. Upload Raw Data| D[(Azure Blob Storage – Raw)]
-        D -->|4. Orchestrate| E[[Azure Data Factory]]
-        E -->|5. Advanced Transform| F[(Azure Blob Storage – Processed)]
-    end
-
-    %% Style definitions
-    classDef storage fill:#E8F1F2,stroke:#2B7A78,stroke-width:2px;
-    classDef process fill:#F0F3BD,stroke:#3A6EA5,stroke-width:2px;
-    class A,B,C,E process;
-    class D,F storage;
+    Kaggle[Kaggle Sales Data] -->|Extract| Script[Python ETL Script]
+    Script -->|Transform| CSV[Cleaned CSV]
+    CSV -->|Upload| Raw[(Azure Blob Storage – Raw)]
+    Raw -->|Orchestrate| ADF[[Azure Data Factory]]
+    ADF -->|Process| Processed[(Azure Blob Storage – Processed)]
 ```
 
 ## Solution Architecture & Process
