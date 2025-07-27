@@ -43,21 +43,50 @@ This repository contains my capstone project for learning and demonstrating mode
 ## ETL Flow Overview
 ```mermaid
 flowchart LR
-    subgraph ETL_Flow [ETL Flow]
-        A[Extraction: Kaggle API]
-        B[Azure Blob Storage]
-        C[Azure Data Factory (ADF)]
-        D[SQL Database]
+    subgraph ETL_Flow ["🔄 ETL Pipeline"]
+        A([📥 Extract: Kaggle Sales Data])
+        B([📁 Raw Data: Azure Blob Storage])
+        C([⚙️ Transform: Azure Data Factory])
+        D([📊 Processed Data: Azure Blob Storage])
         A --> B
         B --> C
         C --> D
     end
-
-    subgraph Security [Security]
-        G[Azure Key Vault]
+    
+    subgraph Infrastructure ["🏗️ Infrastructure & Automation"]
+        E([🏗️ Terraform: Infrastructure as Code])
+        F([🚀 GitHub Actions: CI/CD Pipeline])
     end
-
-    G -. Planned Integration .-> C
+    
+    subgraph Security ["🔐 Security & Secrets"]
+        G([🔑 Azure Key Vault: API Keys])
+    end
+    
+    %% Connections
+    G -.-> A
+    E -.-> B
+    E -.-> C
+    E -.-> G
+    F -.-> B
+    
+    %% Styling
+    classDef etlBox fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
+    classDef infraBox fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    classDef secBox fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    
+    class ETL_Flow etlBox
+    class Infrastructure infraBox
+    class Security secBox
+    
+    %% Link styling
+    linkStyle 0 stroke:#2196f3,stroke-width:3px
+    linkStyle 1 stroke:#2196f3,stroke-width:3px
+    linkStyle 2 stroke:#2196f3,stroke-width:3px
+    linkStyle 3 stroke:#9c27b0,stroke-width:2px
+    linkStyle 4 stroke:#9c27b0,stroke-width:2px
+    linkStyle 5 stroke:#9c27b0,stroke-width:2px
+    linkStyle 6 stroke:#9c27b0,stroke-width:2px
+    linkStyle 7 stroke:#9c27b0,stroke-width:2px
 ```
 
 ## Solution Architecture & Process
