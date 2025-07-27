@@ -127,63 +127,26 @@ resource "azurerm_key_vault" "kv" {
 - All automation (Terraform, CI/CD) uses secure identity and access management.
 - Key Vault is integrated with other Azure services for seamless, secure secret retrieval.
 
-# Secure Management of Kaggle Credentials with Azure Key Vault
+## Secure Kaggle Credential Management with Azure Key Vault
 
-## 1. Overview
+Azure Key Vault securely stores the entire `kaggle.json` file (username and API key) as a single secret, ensuring credentials are never exposed in code or local files. This supports automation, compliance, and auditability.
 
-Managing credentials securely is a key requirement for any data engineering project. This project uses Azure Key Vault to store the entire `kaggle.json` file (which contains both the Kaggle username and API key) as a single secret. This approach prevents sensitive information from being stored locally or exposed in code repositories.
-
----
-
-## 2. Why Use Azure Key Vault?
-
-- **Centralized secret management:** All sensitive credentials are kept in one place, with clear access policies and audit trails.
-- **No secrets in code or local files:** Credentials are never hardcoded or left in project folders, preventing accidental leaks.
-- **Scalable and automation-ready:** Easily integrates with CI/CD pipelines, automation scripts, and future enhancements.
-
----
-
-## 3. The `kaggle.json` File
-
-The `kaggle.json` file is required for authenticated API access to Kaggle. It contains:
-
-```json
-{
-  "username": "lexvidal",
-  "key": "YOUR_KAGGLE_API_KEY"
-}
-```
-
----
-
-## 4. Storing the Kaggle Credentials in Key Vault
-
-To store the full `kaggle.json` as a secret in Azure Key Vault, use the Azure CLI:
-
+**Store credentials:**
 ```bash
 az keyvault secret set --vault-name kv-etl-automation --name kaggle-json --value '{"username":"lexvidal","key":"YOUR_KAGGLE_API_KEY"}'
 ```
 
-- Replace `kv-etl-automation` with your Key Vault name.
-- Replace the JSON values with your real credentials.
-
----
-
-## 5. Retrieving the Secret
-
-You can retrieve the secret at any time using Azure CLI:
-
+**Retrieve for automation:**
 ```bash
-az keyvault secret show --vault-name kv-etl-automation --name kaggle-json --query value -o tsv
+az keyvault secret show --vault-name kv-etl-automation --name kaggle-json --query value -o tsv > kaggle.json
 ```
 
-Example output:
+**Best practices:**
+- Never commit credentials to source control.
+- Use RBAC and audit logs for access control.
+- Integrate secret retrieval into all automated workflows.
 
-```json
-{"username":"lexvidal","key":"YOUR_KAGGLE_API_KEY"}
-```
-
-This output can be saved as a local `kaggle.json` file when needed for your data extraction scripts.
+This enterprise approach ensures that all sensitive credentials, including those for Kaggle, are managed securely, accessed only by authorized processes, and fully auditable for compliance.
 
 ## Azure Data Factory: Orchestration & Advanced Data Transformation
 Azure Data Factory (ADF) is the core orchestration engine in this project, enabling scalable, visual, and code-free data integration across cloud and on-premises sources. ADF pipelines and data flows are used to automate and manage the entire ETL process, ensuring data quality, consistency, and business logic enforcement.
