@@ -44,17 +44,17 @@ This repository contains my capstone project for learning and demonstrating mode
 ```mermaid
 flowchart LR
     subgraph ETL_Flow [ETL Flow]
-        A([📦 Extraction: Kaggle API])
-        B([☁️ Azure Blob Storage])
-        C([🔄 Azure Data Factory (ADF)])
-        D([🗄️ SQL Database])
+        A[Extraction: Kaggle API]
+        B[Azure Blob Storage]
+        C[Azure Data Factory (ADF)]
+        D[SQL Database]
         A --> B
         B --> C
         C --> D
     end
 
-    subgraph Security [Security & Secrets]
-        G([🔐 Azure Key Vault])
+    subgraph Security [Security]
+        G[Azure Key Vault]
     end
 
     G -. Planned Integration .-> C
