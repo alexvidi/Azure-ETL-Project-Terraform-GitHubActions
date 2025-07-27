@@ -42,29 +42,92 @@ This repository contains my capstone project for learning and demonstrating mode
 
 ## ETL Flow Overview
 ```mermaid
-flowchart LR
-    %% Define styles for different node types
-    classDef extract fill:#a9d18e,stroke:#333,stroke-width:2px;
-    classDef transform fill:#f4b183,stroke:#333,stroke-width:2px;
-    classDef storage fill:#8faadc,stroke:#333,stroke-width:2px;
-    classDef orchestrate fill:#ffd966,stroke:#333,stroke-width:2px;
-    classDef secrets fill:#c00000,stroke:#333,stroke-width:2px,color:#fff;
+flowchart TD
+    %% Subgrafos para organizar los componentes
+    subgraph Ë Entorno Local del Desarrollador
+        direction LR
+        Dev[("💻<br>Desarrollador")]
+        subgraph Scripts Python
+            direction TB
+            Extract[📜 download_sales_data.py]
+            Transform[📜 transform_sales_data.py]
+        end
+        subgraph Datos Locales
+            direction TB
+            RawData[📁 data/raw]
+            ProcessedData[📁 data/processed/sales_clean.csv]
+        end
+        KaggleJson[🔑 kaggle.json]
+    end
 
-    %% Assign classes to nodes
-    A[Extract: Kaggle Sales Data]:::extract
-    B[Transform: Python ETL Script]:::transform
-    C[Clean: Cleaned CSV]:::transform
-    D["Upload: Azure Blob Storage (Raw)"]:::storage
-    E["Orchestrate: Azure Data Factory"]:::orchestrate
-    F["Store: Azure Blob Storage (Processed)"]:::storage
-    G["Secrets: Azure Key Vault"]:::secrets
+    subgraph 🤖 CI/CD con GitHub
+        direction TB
+        Repo[🐙<br>Repositorio GitHub]
+        Workflow[⚙️ GitHub Actions<br>(Workflow)]
+        GitHubSecret[🤫 AZURE_CREDENTIALS<br>Secret]
+    end
 
-    %% Define the flow
-   G -.-> A  
-    B --> C
-    C --> D
-    D --> E
-    E --> F
+    subgraph ☁️ Plataforma Azure (Gestionado con Terraform)
+        direction LR
+        subgraph ADF [🏭 Azure Data Factory]
+            direction TB
+            Pipeline[▶️ Pipeline: pipeline_sales_etl]
+            DataFlow[🌊 Data Flow: df_sales_transformations]
+        end
+        subgraph Storage [📦 Azure Storage Account]
+            direction TB
+            RawContainer[📥 Contenedor 'raw']
+            ProcessedContainer[📤 Contenedor 'processed']
+        end
+        subgraph Security [🔐 Seguridad]
+            ADF_MI[🆔 Identidad Gestionada<br>de ADF]
+            SP_GHA[🔑 Service Principal<br>GitHub Actions]
+            KeyVault[🏦 Azure Key Vault]
+        end
+    end
+
+    subgraph Kaggle [🌐 Fuente de Datos Externa]
+        KaggleAPI[📊 Kaggle API]
+    end
+
+    %% ===== Definición de Flujos de Trabajo =====
+
+    %% 1. Flujo Local de Preparación de Datos
+    Dev -- Ejecuta --> Extract
+    KaggleAPI -- Descarga de datos --> Extract
+    KaggleJson -- Autenticación --> Extract
+    Extract -- Guarda CSV bruto --> RawData
+    RawData -- Lee CSV bruto --> Transform
+    Transform -- Guarda CSV limpio --> ProcessedData
+    Dev -- "git push" del código y CSV limpio --> Repo
+
+    %% 2. Flujo de Automatización (CI/CD)
+    Repo -- Dispara al hacer push --> Workflow
+    GitHubSecret -- Provee credenciales --> Workflow
+    Workflow -- Sube archivo --> RawContainer[📥 Contenedor 'raw']
+
+    %% 3. Flujo ETL en Azure
+    Pipeline -- Ejecuta --> DataFlow
+    DataFlow -- Lee datos desde --> RawContainer
+    DataFlow -- Escribe resultado en --> ProcessedContainer
+
+    %% 4. Flujo de Autenticación y Permisos (Seguridad)
+    ADF -- Usa su --> ADF_MI
+    ADF_MI -.->|Tiene rol "Storage Blob Data Contributor"| Storage
+    SP_GHA -.->|Tiene rol "Storage Blob Data Contributor"| Storage
+    KeyVault -.->|Almacena secretos<br> (ej: Kaggle API Key)| ADF
+    
+    %% Estilos para mejorar la legibilidad
+    classDef cloud fill:#e3f2fd,stroke:#333,stroke-width:2px;
+    classDef local fill:#e8f5e9,stroke:#333,stroke-width:2px;
+    classDef cicd fill:#f3e5f5,stroke:#333,stroke-width:2px;
+    classDef security fill:#fffde7,stroke:#333,stroke-width:2px;
+    classDef external fill:#fbe9e7,stroke:#333,stroke-width:2px;
+
+    class ADF,Storage,Security,ADF_MI,SP_GHA,KeyVault,RawContainer,ProcessedContainer,Pipeline,DataFlow cloud;
+    class Dev,Extract,Transform,RawData,ProcessedData,KaggleJson local;
+    class Repo,Workflow,GitHubSecret cicd;
+    class Kaggle,KaggleAPI external;
 ```
 
 ## Solution Architecture & Process
