@@ -42,92 +42,15 @@ This repository contains my capstone project for learning and demonstrating mode
 
 ## ETL Flow Overview
 ```mermaid
-flowchart TD
-    %% Subgrafos para organizar los componentes
-    subgraph Ë Entorno Local del Desarrollador
-        direction LR
-        Dev[("💻<br>Desarrollador")]
-        subgraph Scripts Python
-            direction TB
-            Extract[📜 download_sales_data.py]
-            Transform[📜 transform_sales_data.py]
-        end
-        subgraph Datos Locales
-            direction TB
-            RawData[📁 data/raw]
-            ProcessedData[📁 data/processed/sales_clean.csv]
-        end
-        KaggleJson[🔑 kaggle.json]
-    end
+flowchart LR
+    A[Extraction: Kaggle API] -->|Raw Data| B[Azure Blob Storage]
+    B -->|Processed Data| C[Azure Data Factory (ADF)]
+    C --> D[SQL Database]
+    G[Secrets: Azure Key Vault] -. (planned) .-> C
 
-    subgraph 🤖 CI/CD con GitHub
-        direction TB
-        Repo[🐙<br>Repositorio GitHub]
-        Workflow[⚙️ GitHub Actions<br>(Workflow)]
-        GitHubSecret[🤫 AZURE_CREDENTIALS<br>Secret]
-    end
-
-    subgraph ☁️ Plataforma Azure (Gestionado con Terraform)
-        direction LR
-        subgraph ADF [🏭 Azure Data Factory]
-            direction TB
-            Pipeline[▶️ Pipeline: pipeline_sales_etl]
-            DataFlow[🌊 Data Flow: df_sales_transformations]
-        end
-        subgraph Storage [📦 Azure Storage Account]
-            direction TB
-            RawContainer[📥 Contenedor 'raw']
-            ProcessedContainer[📤 Contenedor 'processed']
-        end
-        subgraph Security [🔐 Seguridad]
-            ADF_MI[🆔 Identidad Gestionada<br>de ADF]
-            SP_GHA[🔑 Service Principal<br>GitHub Actions]
-            KeyVault[🏦 Azure Key Vault]
-        end
-    end
-
-    subgraph Kaggle [🌐 Fuente de Datos Externa]
-        KaggleAPI[📊 Kaggle API]
-    end
-
-    %% ===== Definición de Flujos de Trabajo =====
-
-    %% 1. Flujo Local de Preparación de Datos
-    Dev -- Ejecuta --> Extract
-    KaggleAPI -- Descarga de datos --> Extract
-    KaggleJson -- Autenticación --> Extract
-    Extract -- Guarda CSV bruto --> RawData
-    RawData -- Lee CSV bruto --> Transform
-    Transform -- Guarda CSV limpio --> ProcessedData
-    Dev -- "git push" del código y CSV limpio --> Repo
-
-    %% 2. Flujo de Automatización (CI/CD)
-    Repo -- Dispara al hacer push --> Workflow
-    GitHubSecret -- Provee credenciales --> Workflow
-    Workflow -- Sube archivo --> RawContainer[📥 Contenedor 'raw']
-
-    %% 3. Flujo ETL en Azure
-    Pipeline -- Ejecuta --> DataFlow
-    DataFlow -- Lee datos desde --> RawContainer
-    DataFlow -- Escribe resultado en --> ProcessedContainer
-
-    %% 4. Flujo de Autenticación y Permisos (Seguridad)
-    ADF -- Usa su --> ADF_MI
-    ADF_MI -.->|Tiene rol "Storage Blob Data Contributor"| Storage
-    SP_GHA -.->|Tiene rol "Storage Blob Data Contributor"| Storage
-    KeyVault -.->|Almacena secretos<br> (ej: Kaggle API Key)| ADF
-    
-    %% Estilos para mejorar la legibilidad
-    classDef cloud fill:#e3f2fd,stroke:#333,stroke-width:2px;
-    classDef local fill:#e8f5e9,stroke:#333,stroke-width:2px;
-    classDef cicd fill:#f3e5f5,stroke:#333,stroke-width:2px;
-    classDef security fill:#fffde7,stroke:#333,stroke-width:2px;
-    classDef external fill:#fbe9e7,stroke:#333,stroke-width:2px;
-
-    class ADF,Storage,Security,ADF_MI,SP_GHA,KeyVault,RawContainer,ProcessedContainer,Pipeline,DataFlow cloud;
-    class Dev,Extract,Transform,RawData,ProcessedData,KaggleJson local;
-    class Repo,Workflow,GitHubSecret cicd;
-    class Kaggle,KaggleAPI external;
+    %% Notas al pie
+    classDef plannedstroke stroke-dasharray: 5 5;
+    class G,C plannedstroke;
 ```
 
 ## Solution Architecture & Process
