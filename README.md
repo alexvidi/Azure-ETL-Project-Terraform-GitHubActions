@@ -122,7 +122,7 @@ This project integrates **Azure Key Vault** to ensure the highest standards of s
 - **Centralized Secret Storage:** Sensitive credentials are centrally managed (e.g., Kaggle credentials in Azure Key Vault; CI/CD secrets via GitHub Secrets). Nothing is hardcoded or committed.
 - **Access Control:** Fine-grained access policies restrict secret access to only required users and services (e.g., Data Factory, automation identities).
 - **Automation Ready:** Key Vault is provisioned automatically as part of the infrastructure-as-code deployment, ensuring consistency across environments.
-- **Integration with Azure Data Factory:**ADF integration (planned):** The architecture is prepared for ADF linked services to retrieve secrets from Azure Key Vault; in the current version, linked services use credentials configured directly in ADF.
+- **Integration with Azure Data Factory:**ADF integration (planned):** The architecture is prepared for ADF linked services to retrieve secrets from Azure Key Vault; in the current version, credentials are configured directly in ADF.
 - **Compliance & Auditability:** All secret access is logged and auditable, supporting compliance with enterprise and regulatory standards.
 
 ### Example: Terraform Resource
@@ -146,7 +146,7 @@ resource "azurerm_key_vault" "kv" {
 ### Best Practices Followed
 - No secrets are stored in code or configuration files.
 - All automation (Terraform, CI/CD) uses secure identity and access management.
-- Key Vault is integrated with other Azure services for seamless, secure secret retrieval.
+- Key Vault is provisioned and ready for secure secret retrieval. ADF integration is planned; in this version ADF credentials are configured directly in ADF.
 
 ## Secure Kaggle Credential Management with Azure Key Vault
 
@@ -175,14 +175,14 @@ Azure Data Factory (ADF) is the core orchestration engine in this project, enabl
 ### Key Features & Implementation
 - **Pipeline Orchestration:** ADF pipelines coordinate the movement and transformation of data from raw ingestion to processed analytics-ready outputs.
 - **Mapping Data Flows:** Visual, scalable data transformation logic is implemented using Mapping Data Flows, allowing for complex operations such as filtering, type conversion, aggregation, and enrichment—all without manual coding.
-- **Integration with Azure Key Vault:** **Key Vault integration (planned):** Linked services can be configured to retrieve credentials from Azure Key Vault; in this version, they are configured directly in ADF.
+- **Key Vault integration (planned):** Linked services can be configured to retrieve credentials from Azure Key Vault; in this version, they are configured directly in ADF.
 - **Parameterization:** Pipelines and data flows are parameterized for reusability and flexibility, supporting multiple environments and data sources.
 - **Monitoring & Logging:** ADF provides built-in monitoring, logging, and alerting, enabling operational visibility and rapid troubleshooting.
 - **Artifacts Structure:**
   - `adf/pipeline_sales_etl/pipeline_sales_etl.json`: Main pipeline definition for orchestrating the ETL process.
   - `adf/dataflow_sales_transformations/df_sales_transformations.json`: Data flow for advanced sales data transformation and aggregation.
   - `adf/datasets/`: Definitions for source and sink datasets.
-  - `adf/linkedservices/`: Secure connections to Azure resources, including Key Vault integration.
+  - `adf/linkedservices/`: Secure connections to Azure resources (Key Vault integration planned).
 
 ### Example: Data Flow Logic
 - **Filter:** Remove records with missing or invalid dates.
