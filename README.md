@@ -13,8 +13,8 @@ This repository contains my capstone project for learning and demonstrating mode
 - **Best Practices:** Adheres to modern standards in DevOps, data governance, and software engineering.
 
 ## Key Project Highlights
-- **Full automation:** No manual steps required from data extraction to reporting-ready datasets.
-- **Enterprise security:** Credentials and secrets are managed securely with Azure Key Vault; infrastructure is auditable and compliant.
+- **High automation:** Most steps are automated; some actions may still be manual.
+- **Enterprise security:** Secrets are managed securely (Azure Key Vault for Kaggle credentials; GitHub Secrets for CI/CD); nothing is hardcoded.
 - **Extensibility:** Modular design enables rapid adaptation to new data sources, business rules, or cloud environments.
 - **Operational visibility:** All processes are version-controlled, logged, and easily monitored.
 
@@ -22,7 +22,7 @@ This repository contains my capstone project for learning and demonstrating mode
 - **Python:** Advanced scripting, data wrangling (Pandas), API integration.
 - **Azure Data Factory:** Visual orchestration, data flows, and pipeline automation.
 - **Terraform:** Infrastructure provisioning, compliance, and lifecycle management.
-- **GitHub Actions:** CI/CD automation, workflow orchestration, and secure secret management (integrated with Azure Key Vault).
+- **GitHub Actions:** CI/CD automation, workflow orchestration, and secure secret management (via GitHub Secrets; Key Vault used for data-source credentials).
 - **Azure Blob Storage:** Scalable, durable cloud storage for raw and processed data.
 - **Kaggle API:** Automated data acquisition from external sources.
 - **DevOps & Cloud Engineering:** End-to-end automation, monitoring, and best practices.
@@ -60,11 +60,11 @@ flowchart LR
     G["Secrets: Azure Key Vault"]:::secrets
 
     %% Define the flow
+    G -.-> B  
     A --> B
     B --> C
     C --> D
     D --> E
-    G -.-> E
     E --> F
 ```
 
@@ -98,10 +98,10 @@ flowchart LR
 This project integrates **Azure Key Vault** to ensure the highest standards of security for sensitive information such as credentials, API keys, and connection strings. Key Vault is provisioned and managed via Terraform, and access policies are strictly defined to allow only authorized identities to retrieve or manage secrets.
 
 ### Key Features
-- **Centralized Secret Storage:** All sensitive data is stored securely in Azure Key Vault, never hardcoded or exposed in code repositories.
+- **Centralized Secret Storage:** Sensitive credentials are centrally managed (e.g., Kaggle credentials in Azure Key Vault; CI/CD secrets via GitHub Secrets). Nothing is hardcoded or committed.
 - **Access Control:** Fine-grained access policies restrict secret access to only required users and services (e.g., Data Factory, automation identities).
 - **Automation Ready:** Key Vault is provisioned automatically as part of the infrastructure-as-code deployment, ensuring consistency across environments.
-- **Integration with Azure Data Factory:** Data Factory pipelines and linked services securely retrieve secrets (such as storage keys or database credentials) directly from Azure Key Vault at runtime.
+- **Integration with Azure Data Factory:**ADF integration (planned):** The architecture is prepared for ADF linked services to retrieve secrets from Azure Key Vault; in the current version, linked services use credentials configured directly in ADF.
 - **Compliance & Auditability:** All secret access is logged and auditable, supporting compliance with enterprise and regulatory standards.
 
 ### Example: Terraform Resource
@@ -127,13 +127,71 @@ resource "azurerm_key_vault" "kv" {
 - All automation (Terraform, CI/CD) uses secure identity and access management.
 - Key Vault is integrated with other Azure services for seamless, secure secret retrieval.
 
+# Secure Management of Kaggle Credentials with Azure Key Vault
+
+## 1. Overview
+
+Managing credentials securely is a key requirement for any data engineering project. This project uses Azure Key Vault to store the entire `kaggle.json` file (which contains both the Kaggle username and API key) as a single secret. This approach prevents sensitive information from being stored locally or exposed in code repositories.
+
+---
+
+## 2. Why Use Azure Key Vault?
+
+- **Centralized secret management:** All sensitive credentials are kept in one place, with clear access policies and audit trails.
+- **No secrets in code or local files:** Credentials are never hardcoded or left in project folders, preventing accidental leaks.
+- **Scalable and automation-ready:** Easily integrates with CI/CD pipelines, automation scripts, and future enhancements.
+
+---
+
+## 3. The `kaggle.json` File
+
+The `kaggle.json` file is required for authenticated API access to Kaggle. It contains:
+
+```json
+{
+  "username": "lexvidal",
+  "key": "YOUR_KAGGLE_API_KEY"
+}
+```
+
+---
+
+## 4. Storing the Kaggle Credentials in Key Vault
+
+To store the full `kaggle.json` as a secret in Azure Key Vault, use the Azure CLI:
+
+```bash
+az keyvault secret set --vault-name kv-etl-automation --name kaggle-json --value '{"username":"lexvidal","key":"YOUR_KAGGLE_API_KEY"}'
+```
+
+- Replace `kv-etl-automation` with your Key Vault name.
+- Replace the JSON values with your real credentials.
+
+---
+
+## 5. Retrieving the Secret
+
+You can retrieve the secret at any time using Azure CLI:
+
+```bash
+az keyvault secret show --vault-name kv-etl-automation --name kaggle-json --query value -o tsv
+```
+
+Example output:
+
+```json
+{"username":"lexvidal","key":"YOUR_KAGGLE_API_KEY"}
+```
+
+This output can be saved as a local `kaggle.json` file when needed for your data extraction scripts.
+
 ## Azure Data Factory: Orchestration & Advanced Data Transformation
 Azure Data Factory (ADF) is the core orchestration engine in this project, enabling scalable, visual, and code-free data integration across cloud and on-premises sources. ADF pipelines and data flows are used to automate and manage the entire ETL process, ensuring data quality, consistency, and business logic enforcement.
 
 ### Key Features & Implementation
 - **Pipeline Orchestration:** ADF pipelines coordinate the movement and transformation of data from raw ingestion to processed analytics-ready outputs.
 - **Mapping Data Flows:** Visual, scalable data transformation logic is implemented using Mapping Data Flows, allowing for complex operations such as filtering, type conversion, aggregation, and enrichment—all without manual coding.
-- **Integration with Azure Key Vault:** Linked services and datasets securely retrieve credentials and connection strings from Azure Key Vault, ensuring secrets are never exposed in code or configuration files.
+- **Integration with Azure Key Vault:** **Key Vault integration (planned):** Linked services can be configured to retrieve credentials from Azure Key Vault; in this version, they are configured directly in ADF.
 - **Parameterization:** Pipelines and data flows are parameterized for reusability and flexibility, supporting multiple environments and data sources.
 - **Monitoring & Logging:** ADF provides built-in monitoring, logging, and alerting, enabling operational visibility and rapid troubleshooting.
 - **Artifacts Structure:**
@@ -150,7 +208,7 @@ Azure Data Factory (ADF) is the core orchestration engine in this project, enabl
 
 ### Best Practices Followed
 - All pipelines and data flows are version-controlled and documented.
-- Secrets and credentials are never stored in ADF directly; always retrieved from Azure Key Vault.
+- Secrets and credentials should not be stored directly in ADF. In this version they are configured in ADF; migration to Key Vault is planned.
 - Modular, reusable design for easy adaptation to new business requirements.
 
 ## Tools & Services Used
