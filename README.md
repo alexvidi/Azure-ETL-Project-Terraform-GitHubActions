@@ -44,22 +44,22 @@ This repository contains my capstone project for learning and demonstrating mode
 ```mermaid
 flowchart LR
     subgraph ETL_Flow ["🔄 ETL Pipeline"]
-        A([📥 Extract: Kaggle Sales Data])
-        B([📁 Raw Data: Azure Blob Storage])
-        C([⚙️ Transform: Azure Data Factory])
-        D([📊 Processed Data: Azure Blob Storage])
+        A([📥 Extract: Kaggle Data])
+        B([📁 Raw Data: Blob Storage])
+        C([⚙️ Transform: Data Factory])
+        D([📊 Processed: Blob Storage])
         A --> B
         B --> C
         C --> D
     end
     
-    subgraph Infrastructure ["🏗️ Infrastructure & Automation"]
-        E([🏗️ Terraform: Infrastructure as Code])
-        F([🚀 GitHub Actions: CI/CD Pipeline])
+    subgraph Infrastructure ["🏗️ Infrastructure"]
+        E([🏗️ Terraform: IaC])
+        F([🚀 GitHub Actions: CI/CD])
     end
     
-    subgraph Security ["🔐 Security & Secrets"]
-        G([🔑 Azure Key Vault: API Keys])
+    subgraph Security ["🔐 Security"]
+        G([🔑 Key Vault: API Keys])
     end
     
     %% Connections
