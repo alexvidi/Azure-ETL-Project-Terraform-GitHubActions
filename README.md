@@ -43,14 +43,21 @@ This repository contains my capstone project for learning and demonstrating mode
 ## ETL Flow Overview
 ```mermaid
 flowchart LR
-    A[Extraction: Kaggle API] -->|Raw Data| B[Azure Blob Storage]
-    B -->|Processed Data| C[Azure Data Factory (ADF)]
-    C --> D[SQL Database]
-    G[Secrets: Azure Key Vault] -. (planned) .-> C
+    subgraph ETL_Flow [ETL Flow]
+        A([📦 Extraction: Kaggle API])
+        B([☁️ Azure Blob Storage])
+        C([🔄 Azure Data Factory (ADF)])
+        D([🗄️ SQL Database])
+        A --> B
+        B --> C
+        C --> D
+    end
 
-    %% Notas al pie
-    classDef plannedstroke stroke-dasharray: 5 5;
-    class G,C plannedstroke;
+    subgraph Security [Security & Secrets]
+        G([🔐 Azure Key Vault])
+    end
+
+    G -. Planned Integration .-> C
 ```
 
 ## Solution Architecture & Process
