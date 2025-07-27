@@ -60,8 +60,7 @@ flowchart LR
     G["Secrets: Azure Key Vault"]:::secrets
 
     %% Define the flow
-    G -.-> B  
-    A --> B
+   G -.-> A  
     B --> C
     C --> D
     D --> E
