@@ -16,23 +16,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Set up Python environment
-      - name: Set Up Python 3.10 Environment
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      # Ensure Azure CLI is installed
-      - name: Ensure Azure CLI is Installed
-        run: |
-          if ! command -v az &> /dev/null
-          then
-            echo "Azure CLI not found, installing..."
-            curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-          else
-            echo "Azure CLI is already installed."
-          fi
-
       # Authenticate to Azure using Service Principal credentials
       - name: Azure Login via Service Principal
         uses: azure/login@v2
