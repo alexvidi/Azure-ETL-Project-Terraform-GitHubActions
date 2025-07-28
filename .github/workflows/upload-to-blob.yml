@@ -30,6 +30,6 @@ jobs:
             --container-name raw \
             --file data/processed/sales_clean.csv \
             --name sales_clean.csv \
-            --auth-mode login
+            --auth-mode login \
             --overwrite
 
