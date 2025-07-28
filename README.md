@@ -122,7 +122,7 @@ This project integrates **Azure Key Vault** to ensure the highest standards of s
 - **Centralized Secret Storage:** Sensitive credentials are centrally managed (e.g., Kaggle credentials in Azure Key Vault; CI/CD secrets via GitHub Secrets). Nothing is hardcoded or committed.
 - **Access Control:** Fine-grained access policies restrict secret access to only required users and services (e.g., Data Factory, automation identities).
 - **Automation Ready:** Key Vault is provisioned automatically as part of the infrastructure-as-code deployment, ensuring consistency across environments.
-- **Integration with Azure Data Factory:**ADF integration (planned):** The architecture is prepared for ADF linked services to retrieve secrets from Azure Key Vault; in the current version, credentials are configured directly in ADF.
+- **ADF integration (planned):** The architecture is prepared for ADF linked services to retrieve secrets from Azure Key Vault; in the current version, credentials are configured directly in ADF.
 - **Compliance & Auditability:** All secret access is logged and auditable, supporting compliance with enterprise and regulatory standards.
 
 ### Example: Terraform Resource
