@@ -1,7 +1,13 @@
+# variables.tf
+# Project: Azure ETL Automation
+
 variable "tenant_id" {
-  description = "The tenant ID of the Azure Active Directory"
+  description = "Azure Active Directory Tenant ID."
+  type        = string
 }
 
 variable "object_id" {
-  description = "The object ID of the Service Principal"
+  description = "Object ID of the Service Principal with access to resources."
+  type        = string
 }
+
