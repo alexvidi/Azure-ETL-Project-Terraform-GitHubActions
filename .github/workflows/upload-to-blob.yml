@@ -14,17 +14,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout repository code
+      # 1. Checkout repository code
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Authenticate to Azure using Service Principal credentials
+      # 2. Authenticate to Azure using Service Principal credentials
       - name: Azure Login via Service Principal
         uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # Upload the cleaned sales data CSV to Azure Blob Storage
+      # 3. Upload the cleaned sales data CSV to Azure Blob Storage
       - name: Upload Cleaned CSV to Azure Blob Storage (Raw Container)
         run: |
           az storage blob upload \
