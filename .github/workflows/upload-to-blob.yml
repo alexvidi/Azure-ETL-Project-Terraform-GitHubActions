@@ -2,10 +2,12 @@ name: Upload Cleaned Sales Data to Azure Blob Storage
 
 on:
   push:
+    branches:
+      - master        
     paths:
-      - 'data/processed/sales_clean.csv'
-      - '.github/workflows/upload-to-blob.yml'
-  workflow_dispatch:
+      - 'data/processed/sales_clean.csv'        
+      - '.github/workflows/upload-to-blob.yml' 
+  workflow_dispatch:                           
 
 jobs:
   upload-to-blob:
