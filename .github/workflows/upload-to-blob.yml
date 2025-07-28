@@ -31,4 +31,5 @@ jobs:
             --file data/processed/sales_clean.csv \
             --name sales_clean.csv \
             --auth-mode login
+            --overwrite
 
